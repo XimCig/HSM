@@ -25,7 +25,7 @@ class RouteHSM{
         if(  config('route')==true) {
 
         $path_info = isset( $_SERVER['PATH_INFO'] )?$_SERVER['PATH_INFO']:"/";
-
+        $path_info = str_replace( dirname($_SERVER['REQUEST_URI']),'',$_SERVER['REQUEST_URI']);
         reg::main( $path_info );
             $routeResult = reg::returnRoute();
         if( $routeResult ){
@@ -64,7 +64,7 @@ class RouteHSM{
     public function HandleRoute($routeResult){
 
         $re_arr = explode("/",$routeResult);
-        dump($re_arr);
+
 
         $User_request['controller'] = $re_arr[0];
 

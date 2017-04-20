@@ -3,5 +3,6 @@ return array(
     'helper/auxiliary',
     'helper/input',
     'library/controller',
-    'library/test'
+    'library/PDO_DB_mysql',
+
 );

@@ -1,7 +1,7 @@
 <?php
 namespace hsm;
 class reg{
-    static private $result=array(); //存储路由结果
+    static private $result=array('get'=>array(),'any'=>array(),'post'=>array()); //存储路由结果
     static private $pi;             // PATH_INFO
 
     static function get($url_preg,$action){
@@ -12,13 +12,13 @@ class reg{
     }
 
     static function any($url_preg,$action){
-        $result_count = count(@self::$result['post']);
+        $result_count = count(@self::$result['any']);
         self::$result['any'][$result_count][] = $url_preg;
         self::$result['any'][$result_count][] = $action;
     }
 
     static function post($url_preg,$action){
-        $result_count = count(@self::$result['any']);
+        $result_count = count(@self::$result['post']);
         self::$result['post'][$result_count][] = $url_preg;
         self::$result['post'][$result_count][] = $action;
     }

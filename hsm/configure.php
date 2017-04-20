@@ -1,6 +1,6 @@
 <?php
 
-define("__PATH",dirname( $_SERVER['SCRIPT_FILENAME'] ) );        //程序根目录
+define("__PATH",dirname(dirname(__FILE__)) );        //程序根目录
 
 
 define("DS","/");
@@ -25,7 +25,7 @@ $config = array(
     'run_script'             =>     'index.php',
 
     'default_controller'    =>    'Index',  //默认控制器
-    'default_controller'    =>     'index', //默认方法
+    'default_action'    =>     'index', //默认方法
 
     'url_param_controller'  =>      'main', //url中控制器的参数
     'url_param_action'       =>      'action', //url中操作的参数
@@ -41,5 +41,6 @@ $config = array(
 
     'model_path'              =>   __PATH.DS."model".DS,        //模型路径
 
+    'HSM_VERSION'            => '0.1'
 
 );

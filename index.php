@@ -13,20 +13,11 @@
  */
 
 
-define("DEBUG",false);
-
-$hsm_config['hsm']  =   "./hsm/";    // HSM Framework Path
-
-if(DEBUG){
-    require_once ($hsm_config['hsm'].'library/php_error.php');
-
-    \php_error\reportErrors();
-}else{
-    ini_set("display_errors","on");     // DEBUG -  On | Off
+define("DEBUG",true);
+if(!DEBUG){
+    ini_set("display_errors",'on');
 }
-
-
-
+$hsm_config['hsm']  =   "./hsm/";    // HSM Framework Path
 
 require_once( $hsm_config['hsm']."hsm.class.php" );
 

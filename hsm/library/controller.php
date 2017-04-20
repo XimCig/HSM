@@ -9,11 +9,28 @@ class Controller{
 
     }
 
-    public function view()
+    public function view($viewFile=false)
     {
         header('Content-Type:text/html');
+
         $run = config('run');
 
-        require_once ( config('themplate_path').$run['controller'].DS.$run['run_action'].$this->view_FileType ) ;
+        $viewFile = $viewFile?$viewFile:$run['run_action'];
+
+       // $html =  file_get_contents( config('themplate_path').$run['controller'].DS.$viewFile.$this->view_FileType  ) ;
+        require_once (  config('themplate_path').$run['controller'].DS.$viewFile.$this->view_FileType  );
+    }
+
+    public function json($jsArr)
+    {
+        header('Content-type:application/json');
+        echo json_encode($jsArr);
+        config("pageIsJson",true);
+    }
+
+    public function js($jsStr){
+        header("Content-Type:application/javascript");
+        echo $jsStr;
+        config("pageIsJson",true);
     }
 }

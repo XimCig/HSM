@@ -11,7 +11,7 @@ function dump($var){
 
 function error404(){
     include __PATH.'/hsm/page/404.php';
-    die();
+
 }
 
 /*

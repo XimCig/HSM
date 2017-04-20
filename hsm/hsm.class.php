@@ -25,18 +25,19 @@ class HSM_
     {
         self::$end_time = microtime(true);
 
-        if(!DEBUG){
+        if(DEBUG && self::config('pageIsJson') ){
 
             echo '<div style="position: fixed;
     line-height:25px;
+    border-radius:5px;
     text-align: center;
-    right: 0;
-    bottom: 0;
+    right: 10px;
+    bottom: 10px;
     width: 135px;
     height: 25px;
     background: rgba(9, 168, 0, 0.75);
     color: rgb(255, 255, 255);">
-               Run : '.round (self::$end_time - self::$start_time,5).'S
+               Run : '.round (self::$end_time - self::$start_time,4).'S
                 </div>
                 ';
         }
@@ -88,12 +89,23 @@ class HSM_
         require_once ($actionFile);
         //运行实例
         $app_main  = new $userReturn['controller']();
-        $app_main->$userReturn['action']();
+
+        if( method_exists($app_main,$userReturn['action']) ){
+            $app_main->$userReturn['action']();
+        }else{
+            $method = self::$config['default_controller'].self::$config['action_name'];
+            
+            $app_main->$method();
+        }
+
 
    }
 
     static private function loader()
     {
+        if(DEBUG){
+            require_once (self::$config['hsm'].'library'.DS.'HSMerror.php');
+        }
        $loader['system'] = require_once (self::$config['hsm'].DS.'config'.DS.'loader.php');
 
 
@@ -117,9 +129,24 @@ class HSM_
            self::$config[$configName] = $configValue;
            return true;
         }else{
-            return self::$config[$configName];
+            return isset( self::$config[$configName] )?  self::$config[$configName] :false;
         }
 
 
+    }
+
+
+    static public function print_error($e){
+
+        if(DEBUG) {
+
+            require_once(self::config('hsm') . DS . 'page' . DS . 'error.php');
+            self::__end();
+        }else{
+            header("HTTP/1.1 404 Not Found");
+            header("Status: 404 Not Found");
+            error404();
+        }
+        die();
     }
 }
