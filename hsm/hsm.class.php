@@ -16,35 +16,16 @@ class HSM_
     //程序开始
     static function __start()
     {
+        //记录应用开始时间
         self::$start_time = microtime(true);
 
     }
 
-    //程序结束
-    static function __end()
-    {
-        self::$end_time = microtime(true);
-
-        if(DEBUG && self::config('pageIsJson') ){
-
-            echo '<div style="position: fixed;
-    line-height:25px;
-    border-radius:5px;
-    text-align: center;
-    right: 10px;
-    bottom: 10px;
-    width: 135px;
-    height: 25px;
-    background: rgba(9, 168, 0, 0.75);
-    color: rgb(255, 255, 255);">
-               Run : '.round (self::$end_time - self::$start_time,4).'S
-                </div>
-                ';
-        }
-    }
 
     //主程序   - main
     static public function main(){
+
+
         self::__start();
 
         $hsm_config_path = $GLOBALS['hsm_config']['hsm'];
@@ -69,6 +50,7 @@ class HSM_
 
         self::route();
 
+        self::definition();
     }
 
    static private function route()
@@ -87,25 +69,28 @@ class HSM_
        if(!file_exists( $actionFile )  && DEBUG==false )error404();
 
         require_once ($actionFile);
+
+
         //运行实例
         $app_main  = new $userReturn['controller']();
 
         if( method_exists($app_main,$userReturn['action']) ){
-            $app_main->$userReturn['action']();
-        }else{
-            $method = self::$config['default_controller'].self::$config['action_name'];
-            
+          $method = $userReturn['action'];
             $app_main->$method();
+        }else{
+            echo "Not found method ".$userReturn['action']." in Class ".$userReturn['controller']."!";
         }
+
+
 
 
    }
 
     static private function loader()
     {
-        if(DEBUG){
+        /*if(DEBUG){
             require_once (self::$config['hsm'].'library'.DS.'HSMerror.php');
-        }
+        }*/
        $loader['system'] = require_once (self::$config['hsm'].DS.'config'.DS.'loader.php');
 
 
@@ -149,4 +134,44 @@ class HSM_
         }
         die();
     }
+
+    static private function definition(){
+
+        if( $_SERVER['REQUEST_METHOD'] == "POST"){
+            define('IS_POST',true);
+            define("IS_GET",false);
+        }else{
+            define("IS_POST",false);
+            define("IS_GET",true);
+        }
+
+
+    }
+
+
+
+        //程序结束
+        static function __end()
+        {
+            //记录结束时间
+            self::$end_time = microtime(true);
+
+            //输出运行时间
+            if(DEBUG && !self::config('pageIsJson') ){
+
+                echo '<div style="position: fixed;
+        line-height:25px;
+        border-radius:5px;
+        text-align: center;
+        right: 10px;
+        bottom: 10px;
+        width: 135px;
+        height: 25px;
+        background: rgba(9, 168, 0, 0.75);
+        color: rgb(255, 255, 255);">
+                   Run : '.((round(self::$end_time - self::$start_time,6))*1000).'Mili
+                    </div>
+                    ';
+            }
+        }
 }

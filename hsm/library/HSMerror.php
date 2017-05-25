@@ -1,8 +1,8 @@
 <?php
-error_reporting(E_ALL & ~E_WARNING & ~E_ERROR);
+/**error_reporting(E_ALL & ~E_WARNING & ~E_ERROR);
 set_error_handler('HSMerror',E_ERROR |E_WARNING);
 set_exception_handler('HSMerror');
-
+**/
 class HSMerror{
     public $ErrorType;
 
@@ -50,4 +50,3 @@ function HSMerror($errno, $errstr, $errfile, $errline)
         die();
 
 }
-

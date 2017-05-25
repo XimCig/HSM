@@ -24,16 +24,22 @@ class RouteHSM{
 
         if(  config('route')==true) {
 
-        $path_info = isset( $_SERVER['PATH_INFO'] )?$_SERVER['PATH_INFO']:"/";
-        $path_info = str_replace( dirname($_SERVER['REQUEST_URI']),'',$_SERVER['REQUEST_URI']);
-        reg::main( $path_info );
-            $routeResult = reg::returnRoute();
-        if( $routeResult ){
-             $this->HandleRoute($routeResult);
-        }else{
-            $routeParam = $this->Urlparam();
+              $path_info = isset( $_SERVER['PATH_INFO'] )?$_SERVER['PATH_INFO']:"/";
+        //    $path_info = str_replace( dirname($_SERVER['REQUEST_URI']),'',$_SERVER['REQUEST_URI']);
 
-        }
+            reg::main( $path_info );
+
+                $routeResult = reg::returnRoute();
+
+            if( $routeResult ){
+
+                 $this->HandleRoute($routeResult);
+
+            }else{
+
+                $routeParam = $this->Urlparam();
+
+            }
 
         }else{
             $routeParam = $this->Urlparam();
@@ -65,12 +71,22 @@ class RouteHSM{
 
         $re_arr = explode("/",$routeResult);
 
-
         $User_request['controller'] = $re_arr[0];
 
         $User_request['run_action'] = $re_arr[1];
 
         $User_request['action'] = $re_arr[1].$this->action_name_after;
+
+
+        if( count($re_arr)>2){
+          $count = count( $re_arr );
+
+          for( $i=2;$i<$count;$i++){
+            $_GET[ $re_arr[$i] ] = $re_arr[$i+1];
+            $i++;
+          }
+
+        }
 
         $this->userReturn   =  $User_request;
     }

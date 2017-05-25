@@ -12,18 +12,17 @@ class reg{
     }
 
     static function any($url_preg,$action){
+
         $result_count = count(@self::$result['any']);
         self::$result['any'][$result_count][] = $url_preg;
         self::$result['any'][$result_count][] = $action;
     }
 
-    static function post($url_preg,$action){
-        $result_count = count(@self::$result['post']);
-        self::$result['post'][$result_count][] = $url_preg;
-        self::$result['post'][$result_count][] = $action;
-    }
+
+
 
     static function main($path_info){
+        self::any("/(.*)/(.*)","$1/$2");
         self::$pi =  $path_info;
 
     }
@@ -31,18 +30,20 @@ class reg{
     static function returnRoute()
     {
 
-        if($_SERVER['REQUEST_METHOD'] =='GET'){
-            $userReturn = self::matchingGet();
-        }elseif( $_SERVER['REQUEST_METHOD'] =='POST'){
-            $userReturn = self::matchingPost();
-        }
+
+        $userReturn = self::matchingAny();
+
+      
+
+
         return ($userReturn);
     }
     static private function matchingGet(){
         $getPreg = self::$result['get'];
-         $pi = self::$pi;
+        $pi = self::$pi;
+        $result = false;
         foreach( $getPreg as $k=>$v ){
-           // echo "#^".$v[0]."$#";
+            // echo "#^".$v[0]."$#";
             if( preg_match_all("#^".$v[0]."$#",$pi,$matches) ){
                 $result = $v[1];
                 break;
@@ -50,10 +51,8 @@ class reg{
         }
 
 
-        if(!isset($result)){
-            return self::matchingAny();
-        }
-        $matches = count($matches[0])>0?$matches:false;
+        @$matches = count($matches[0])>0?$matches:false;
+
         if( strpos($result,'$')!==false){
             unset($matches[0]);
             foreach ($matches as $k=>$v){
@@ -71,17 +70,30 @@ class reg{
     }
 
     static private function matchingAny(){
-        $getPreg = self::$result['any'];
-        $pi = self::$pi;
-        foreach( $getPreg as $k=>$v ){
-             //echo "#^".$v[0]."$#";
-            if( preg_match("#^".$v[0]."$#",$pi) ){
-                $result = $v[1];
-            }
-        }
-        if(!isset($result)){
-            return false;
-        }
-        return $result;
+      $getPreg = self::$result['any'];
+       $pi = self::$pi;
+      $result = false;
+
+      foreach( $getPreg as $k=>$v ){
+          // echo "#^".$v[0]."$#";
+          if( preg_match_all("#^".$v[0]."$#",$pi,$matches) ){
+              $result = $v[1];
+              break;
+          }
+      }
+
+
+      @$matches = count($matches[0])>0?$matches:false;
+
+      if( strpos($result,'$')!==false){
+          unset($matches[0]);
+          foreach ($matches as $k=>$v){
+
+              $result = preg_replace('/\$'.$k.'/',$v[0],$result);
+          }
+
+
+      }
+      return $result;
     }
 }

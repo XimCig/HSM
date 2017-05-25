@@ -3,6 +3,7 @@
 /*
  *  打印
  * */
+
 function dump($var){
     echo "<pre>";
     var_dump($var);

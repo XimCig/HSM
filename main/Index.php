@@ -1,22 +1,16 @@
 <?php
 
 class Index extends Controller{
+
+
     public function indexAction(){
-       $a = db();
 
+        $a = db();
 
-       dump( $a->query('select * from posistive where id=202')->resultOne() );
-
-
-       // echo mysql_db::$conn_num;
-       // $this->view();
+      dump( $a->prep("select * from positive where id=:id",['id'=>g('id')])->resultOne() );
     }
 
-    public function fuAction(){
-        $this->view();
-    }
-
-    public function fuxAction(){
-        $this->json(array('a'=>'1'));
+    public function FucksAction(){
+      echo "1";
     }
 }
