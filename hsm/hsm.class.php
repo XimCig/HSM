@@ -36,6 +36,7 @@ class HSM_
 
         self::$config['hsm'] =  $hsm_config_path;
 
+        //装配应用
         self::assembly();
 
         self::__end();
@@ -46,17 +47,28 @@ class HSM_
      */
     static private function assembly()
     {
+        //载入library文件
         self::loader();
-
+        //定义常用变量
+        self::definition();
+        //运行路由
         self::route();
 
-        self::definition();
     }
 
    static private function route()
    {
+
+        //路由匹配类
+        require_once ( self::$config['hsm'].DS.'library'.DS.'registerRoute.php');
+
+
+        //路由配置文件
+        require_once ( self::$config['controller_path'].DS.'route.php');
+
        //运行路由
         require_once(self::$config['hsm'].DS.'library'.DS."route.php");
+
 
         $RouteHSM = new RouteHSM( self::$config['route'] );
 
@@ -66,7 +78,7 @@ class HSM_
 
         $actionFile = self::$config['controller_path'].$userReturn['controller'].'.php';
 
-       if(!file_exists( $actionFile )  && DEBUG==false )error404();
+        if(!file_exists( $actionFile )  && DEBUG==false )error404();
 
         require_once ($actionFile);
 
@@ -94,17 +106,18 @@ class HSM_
        $loader['system'] = require_once (self::$config['hsm'].DS.'config'.DS.'loader.php');
 
 
+
        foreach ( $loader['system'] as $v ){
            require_once ( self::$config['hsm'].$v.'.php');
        }
 
-        if(self::config('route')) {
 
-            require_once ( self::$config['hsm'].DS.'library'.DS.'registerRoute.php');
 
-            require_once ( self::$config['controller_path'].DS.'route.php');
+       require_once ( self::$config['hsm'].DS.'library'.DS.'registerRoute.php');
 
-        }
+       require_once ( self::$config['controller_path'].DS.'route.php');
+
+
 
     }
 
@@ -139,11 +152,10 @@ class HSM_
 
         if( $_SERVER['REQUEST_METHOD'] == "POST"){
             define('IS_POST',true);
-            define("IS_GET",false);
         }else{
             define("IS_POST",false);
-            define("IS_GET",true);
         }
+
 
 
     }
@@ -169,7 +181,7 @@ class HSM_
         height: 25px;
         background: rgba(9, 168, 0, 0.75);
         color: rgb(255, 255, 255);">
-                   Run : '.((round(self::$end_time - self::$start_time,6))*1000).'Mili
+                   Run : '.((round(self::$end_time - self::$start_time,5))*1000).'Mili
                     </div>
                     ';
             }

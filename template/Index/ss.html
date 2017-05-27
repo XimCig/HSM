@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Hello</title>
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.js"></script>
+  </head>
+  <body>
+<input type="text" id="cid"><button id="ch">Look</button>
+<div id="wxcode"></div>
+
+<script type="text/javascript">
+    $(function(){
+        $("#ch").click(function(){
+            $.ajax({
+                url:"<?=url("Index/Fucks")?>",
+                data:{id:$("#cid").val().trim()},
+                dataType:"json",
+                type:"post",
+                success:function(res){
+                    if(res.status == "ok"){
+                      $("#wxcode").text(res.wx);
+                    }
+                }
+            });
+       })
+    });
+</script>
+  </body>
+</html>

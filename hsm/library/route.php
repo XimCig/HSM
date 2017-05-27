@@ -24,10 +24,17 @@ class RouteHSM{
 
         if(  config('route')==true) {
 
-              $path_info = isset( $_SERVER['PATH_INFO'] )?$_SERVER['PATH_INFO']:"/";
-        //    $path_info = str_replace( dirname($_SERVER['REQUEST_URI']),'',$_SERVER['REQUEST_URI']);
+            if(dirname($_SERVER['REQUEST_URI']) == "\\" ){
+                $path_info = "/";
+            }else{
 
-            reg::main( $path_info );
+             $path_info = str_replace( dirname($_SERVER['PHP_SELF']),'',$_SERVER['REQUEST_URI']);
+
+            }
+
+            //  $path_info = $_SERVER['REDIRECT_PATH_INFO'];
+
+                reg::main( $path_info );
 
                 $routeResult = reg::returnRoute();
 

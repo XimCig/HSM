@@ -2,16 +2,25 @@
 
 class Index extends Controller{
 
-
+    /**
+     * [indexAction description]
+     * @return [type] [description]
+     */
     public function indexAction(){
-      dump($_GET);
-        $a = db();
-        $id = g('id')??20;
-        echo $id;
-        dump( $a->prep("select * from positive where id=:id",['id'=>$id])->resultOne() );
+
+      $xCurl = new xCurl( 'http://qder.coorain.com.cn','android');
+      echo $xCurl
+      ->config( [CURLOPT_HEADER=>0] )
+      ->getPage();
+      echo "1";
     }
 
     public function FucksAction(){
-      echo "1";
+
+var_dump($_SERVER['HTTP_REFERER']);
+    }
+
+    public function ssAction(){
+      $this->view();
     }
 }

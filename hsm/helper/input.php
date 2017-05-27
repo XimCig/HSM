@@ -8,3 +8,14 @@ function g($get_name){
         return null;
     }
 }
+
+
+function p($post_name){
+  $posts = $_POST[$post_name]??null;
+  if( $posts !=null ){
+      return htmlspecialchars($_POST[$post_name]);
+  }else{
+      return null;
+  }
+
+}
