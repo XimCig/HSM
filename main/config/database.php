@@ -16,6 +16,6 @@ $mysql['coding']        =       'UTF8'      ;
 //数据库前缀
 $mysql['prefix']        =       ''           ;
 //数据库端口 默认3306
-$mysql['port']          =        ''          ;
+$mysql['port']          =        '3306'          ;
 
 $mysql['PERSISTENT']    =       true        ;

@@ -7,12 +7,7 @@ class Index extends Controller{
      * @return [type] [description]
      */
     public function indexAction(){
-
-      $xCurl = new xCurl( 'http://qder.coorain.com.cn','android');
-      echo $xCurl
-      ->config( [CURLOPT_HEADER=>0] )
-      ->getPage();
-      echo "1";
+      db();
     }
 
     public function FucksAction(){

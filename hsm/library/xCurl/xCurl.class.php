@@ -72,7 +72,7 @@ class xCurl{
         $result = curl_exec($this->curlHandle);
         if( curl_errno( $this->curlHandle ) ){
 
-          $this->error = 'curl Error : '. curl_error( $this->curlHandle);
+          $this->errorInfo = 'curl Error : '. curl_error( $this->curlHandle);
 
           return false;
         }else{
